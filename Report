@@ -1,1 +1,18 @@
+# ESP32 Power Monitor Project
 
+## 🔧 Overview
+This project monitors electrical power using an ESP32 and the PZEM004Tv30 module. It also hosts a web dashboard via SPIFFS to display live data and control relays.
+
+## 🧰 Components Used
+- ESP32-WROOM-32
+- PZEM004T v3.0
+- ESPAsyncWebServer
+- HTML5 + JavaScript (for dashboard)
+- Relay module
+
+## 🛠️ Features
+- Real-time Voltage, Current, Power monitoring
+- Load ON/OFF control via web
+- Total ON-time tracking
+- Hysteresis logic for automatic control
+- Hosted web dashboard (served from SPIFFS)
