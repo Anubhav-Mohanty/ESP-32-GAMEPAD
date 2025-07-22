@@ -1,6 +1,7 @@
 # ESP-32-GAMEPAD
 
 Repository for ESP-32 based DIY GamePad  .
+![]
 
 # INTRODCUTION
 
@@ -10,11 +11,11 @@ This project i made this for fun and i did it because i liked it and i wanted to
 
 # MINIMUM COMPONENTS NEEDED 
 
- - ESP-32 (38-pin)
- - 6 Tacticle switches
- - One Micro USB cable
- - A breadboard
- - Male to Male Jumper wires .
+ - **ESP-32 (38-pin)**
+ - **6 Tacticle switches**
+ - **One Micro USB cable**
+ - **A breadboard**
+ - **Male to Male Jumper wires .**
 
 Since this was my DIY project i have used minimal set up , so that anyone can play with minimal setup , no complex thingy .
 
@@ -111,15 +112,70 @@ The mistake im reffering to is **not using edge detection in our program** . One
 **Is edge detection necessary**
 
 Yes edge detection is very necessary because Arduino IDE runs at faster pace in the `void loop()` section so if not used edge detection it would change position multiple time even if the button is pressed once . In other words if the control flow is at nx speed and the time gap between your prssing and releasing the button is x second the the command would be excetecuted 
-```
-nx/x= n times .
-```
+
+> nx/x= n times .
+
+
 So even if you've just pressed once instead of updating the player position by `(position+sensitivity)` it will update `n X (position+sensitivity)` which would be an error . 
 
 In other words for every change we need in position
 
-- we have to press the button once and rapidly
-- holding it down would chnage only once since , but not increase it continously if held down for a long time.
+- **we have to press the button once and rapidly**
+- **holding it down would chnage only once since , but not increase it continously if held down for a long time.**
+
+Here is the piece of code that does the edge detection thing : 
+```
+// Previous button states for edge detection
+int last_start_buttonState = HIGH;
+int last_top_buttonState = HIGH;
+int last_left_buttonState = HIGH;
+int last_right_buttonState = HIGH;
+int last_down_buttonState = HIGH;
+int last_sensi_buttonState = HIGH;
+```
+See how I have initilized the rpevious button states as HIGH (same as the first initlized button state) .
+
+Now we need to set up the sensitivity.
+```
+// Sensitivity setup
+bool setSensitivity = false;
+int sensi_count = 1;
+```
+`bool setSensitivity = false;`Sets the inital sensitivity value as false .
+
+`int sensi_count = 1;`Sets the initial sensiticvity count to 1 , although we can change the sensitivity as we want . I do not recommend playing with sensitivity 1 change it to 5 or higher its easy to shift . 
+
+Now we proceed to the `void setup()` part of the program.
+```
+// Initialize button pins
+  pinMode(start_button_Pin, INPUT_PULLUP);
+  pinMode(top_button_Pin, INPUT_PULLUP);
+  pinMode(left_button_Pin, INPUT_PULLUP);
+  pinMode(right_button_Pin, INPUT_PULLUP);
+  pinMode(down_button_Pin, INPUT_PULLUP);
+  pinMode(sensi_button_Pin, INPUT_PULLUP);
+```
+The pinMode(<button_Pin>,INPUT_PULLUP) syntax means : We are setlecting the button and assigning its function that is taking input. The `INPUT_PULLUP` helps to ttack the 10k ohm  internal pull-up resistor to the button.
+
+This is the wifi connectivity block of my code .
+```
+// Connect to WiFi
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  
+  Serial.println();
+  Serial.print("Connected! IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.println("Open this IP in your browser to play the game!");
+```
+Once the ESP-32 is connected to our wifi and it will show the message as well as the IP adress of wifi in the Serial Monitor . There is anothe approach to solve this that is by assigning a static ip-adress but i do not recommend that method as it would be problematic if there happens to be a device with same IP addrsss our ESP . 
+
+After getting the IP Address we can enter it in Search bar of Google CHrome /Edge whatever webserver you use .
 
 
 
@@ -143,6 +199,7 @@ The frontend part of the code is whzt is being displayed on the screen it cinclu
 
 
 # VIDEOS 
+
 
 
 # WHY I MADE THIS ?
